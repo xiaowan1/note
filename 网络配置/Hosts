@@ -1,0 +1,5 @@
+IDEA提交不了代码 Couldn't resolve host 'github.com'
+
+1.ping github.com
+
+2.C:\Windows\System32\drivers\etc\hosts 最后面一行加入 2018.12.5(ip) github.com
