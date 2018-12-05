@@ -1,0 +1,54 @@
+ --常用
+    --拼接字符串 ||
+    select p.voucher_no||p.payee_account_name as pj from pay_voucher p
+    --截取结果集 将rownum作为伪劣筛选,mysql中使用 limit
+    select *from (select p.*,rownum r from pay_voucher p) where r between 2 and 4
+    --修改表中数据 rowid 解锁
+    select p.*,rowid from pay_voucher p;
+    --模糊查询 like % _(单个字符)
+    select p.payee_account_name from pay_voucher p where p.payee_account_name like '张%'
+    -- in(null,5)有结果,not in(null,5)无结果
+
+--字符函数
+    select * from emp;
+    -- initcap 首字母大写 lower 全小写  upper 全大写
+    select ename,initcap(ename),lower(ename),upper('wjm')  from emp;
+    -- replace(数据来源,'你要替换的值','替换过后的值') 替换函数
+    select ename,replace(ename,'A','JAVA') from emp;
+    -- substr(数据来源,从哪一位开始截取,截几位) 截取函数
+    select ename,substr(ename,1,2) from emp;
+
+-- 数字函数
+    --ceil 函数 向上取整(又称天花板函数),floor 函数 向下取整 (又称地板函数)
+    select ceil(123.00008),floor(128.999999) from dual;
+    --power(m,n) 求幂;mod(m,n);取模 round(m,n) 是数据来源，n代表保留几位小数进行四舍五入 ;trunc(m,n)不进行四舍五入的
+    select power(3,4),mod(10,3),round(123.56789,2),trunc(123.56789,2) from dual;
+
+--日期函数
+    --sysdate 获取当前系统的时间
+    select sysdate from dual;
+    --add_months(时间数据,要添加的月份) 添加月份
+    select add_months('01-1月-1990',2) from emp e;
+    --last_day 求当月的最后一天
+    select hiredate,last_day('01-1月-1990') from emp;
+    --months_between(日期1,日期2) 返回两个月之间的月份
+    select months_between('01-1月-1990','01-2月-1990') from dual;
+    -- 时间戳 从1970年1月1号 00点 0分 0秒到现在的一个秒数
+
+--转换函数
+    --to_char(数据的来源,'转换的格式')
+    select sysdate,to_char(sysdate,'yyyy-mm-dd') from dual;
+    -- to_date(数据的来源,'转换的格式')     -- 关于时间的两种格式 ： yyyy -mm -dd 日月年   hh24:mi:ss 时分秒
+    select to_date('2007-11-02   13:45:25','yyyy-mm-dd hh24:mi:ss') from dual;
+
+
+--其他函数
+    --NVL (判断null值，如果是null则显示你规定替换的值)
+    select comm,NVL(comm,0) from emp;
+    --NVL2(数据来源,没有匹配到显示的值,匹配到了过后才显示的值)
+    select ename,sal,comm,NVL2(comm,(sal+comm)*12,0) from emp
+    -- 一旦用了decode，他就只匹配哪一种数据，其他的都会变成null，如果不想变成null,那就把所有的结果全部假设到
+    select ename,job,decode(job,'CLERK','职员') from emp;
+    select ename,job,decode(job,'CLERK','职员','SALESMAN','销售员','MANAGER','经理','ANALYST','数据库分析员','PRESIDENT','老板') from emp;
+
+--统计函数 count 统计非空总行数,sum 统计某一列的总和,avg 统计某一列的平均值,max 统计某一列的最大值,min 统计某一列的最小值,
